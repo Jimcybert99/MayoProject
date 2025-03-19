@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 const initialPosts = [
@@ -99,7 +99,22 @@ function App() {
     }
   };
 
+  //test backend to frontend
+  const[data, setData] = useState([{}])
+
+  useEffect(() => {
+    fetch("/members").then(
+      res => res.json()
+    ).then(
+      data => {
+        setData(data)
+        console.log(data)
+      }
+    )
+  }, [])
+
   return (
+    
     <div className="App">
       <div className="container">
         {/* Left Column for Social Groups */}
@@ -179,6 +194,19 @@ function App() {
                     }}
                   />
                 </div>
+              
+                
+                {/* Backend Test*/}
+                <div>
+                    {(typeof data.members === 'undefined') ? (
+                      <p>Loading...</p>
+                     ) : (
+                        data.members.map((member, i) => (
+                          <p key={i}>{member}</p>
+                        ))
+                      )}
+                </div>
+                
               </div>
             ))}
           </div>
