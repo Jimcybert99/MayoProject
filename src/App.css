@@ -1,38 +1,132 @@
 .App {
-  text-align: center;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #f4f4f4;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  gap: 20px;
+}
+
+.social-groups {
+  flex: 1;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.social-groups h2 {
+  text-align: center;
+  font-size: 1.8em;
+  margin-bottom: 15px;
+}
+
+.social-groups ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.social-groups ul li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.social-groups ul li:hover {
+  background-color: #f0f0f0;
+}
+
+.create-group input,
+.create-group button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.create-group button {
+  background-color: #007BFF;
   color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
-.App-link {
-  color: #61dafb;
+.create-group button:hover {
+  background-color: #0056b3;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.posts-column {
+  flex: 2;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.create-post input,
+.create-post textarea,
+.create-post button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 15px;
+}
+
+.create-post button {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.create-post button:hover {
+  background-color: #0056b3;
+}
+
+.posts {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.post {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.post h2 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.post p {
+  color: #555;
+}
+
+.post-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.like-btn, .dislike-btn {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 5px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.like-btn:hover, .dislike
