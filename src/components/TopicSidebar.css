@@ -1,0 +1,31 @@
+.topics-sidebar {
+    flex: 1;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
+  
+  .topics-sidebar h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .topics-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .topics-sidebar li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    color: #005eb8;
+    cursor: pointer;
+  }
+  
+  .topics-sidebar li:hover {
+    background-color: #f1f1f1;
+  }
+  
