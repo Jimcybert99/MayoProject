@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './ForumHome.css';
 import TopicSidebar from '../components/TopicSidebar';
+import NewThreadModal from '../components/NewThreadModal';
+
 
 function ForumHome() {
   const [discussions, setDiscussions] = useState([
@@ -31,6 +34,19 @@ function ForumHome() {
   ]);
 
   const [sortOption, setSortOption] = useState('date');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handlePostDiscussion = (newPost) => {
+    const newDiscussion = {
+      id: discussions.length + 1,
+      topic: newPost.topic,
+      title: newPost.title,
+      replies: 0,
+      likes: 0,
+      activity: 'Just now'
+    };
+    setDiscussions([newDiscussion, ...discussions]);
+  };
 
   
   return (
@@ -39,8 +55,17 @@ function ForumHome() {
         <TopicSidebar />
 
         <div className="discussions-list">
+          <NewThreadModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            onPost={handlePostDiscussion}
+          />
+
           <div className="forum-header">
-            <button className="start-discussion-btn">Start a discussion</button>
+          <button className="start-discussion-btn" onClick={() => setIsModalOpen(true)}>
+            Start a discussion
+          </button>
+
             <input
               type="text"
               placeholder="Search discussions"
@@ -68,7 +93,9 @@ function ForumHome() {
           {discussions.map((d) => (
             <div className="discussion-card" key={d.id}>
               <span className="topic-col">{d.topic}</span>
-              <span className="title-col">{d.title}</span>
+              <span className="title-col">
+                <Link to={`/thread/${d.id}`}>{d.title}</Link>
+              </span>
               <span className="replies-col">{d.replies}</span>
               <span className="likes-col">{d.likes}</span>
               <span className="activity-col">{d.activity}</span>

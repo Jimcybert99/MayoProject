@@ -1,0 +1,77 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+  
+.modal {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+  
+.modal h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+  
+.modal label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 0.95em;
+}
+  
+.modal input,
+.modal textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+}
+  
+.modal textarea {
+    height: 100px;
+    resize: vertical;
+}
+  
+.post-btn {
+    margin-top: 20px;
+    padding: 10px 16px;
+    background-color: #005eb8;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+  
+.post-btn:hover {
+    background-color: #004999;
+}
+  
+.close-btn {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    font-size: 1.5rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #666;
+}
+  

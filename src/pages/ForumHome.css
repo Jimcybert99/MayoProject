@@ -4,6 +4,22 @@
     background-color: #f8f9fa;
 }
   
+.forum-body {
+    display: flex;
+    gap: 20px;
+}
+  
+.discussions-list {
+    flex: 3;
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+  
+/* Header inside the discussions list */
 .forum-header {
     display: flex;
     justify-content: flex-end;
@@ -13,15 +29,7 @@
     flex-wrap: wrap;
 }
   
-.search-input {
-    width: 250px;
-}
-  
-.sort-dropdown {
-    width: 120px;
-}
-  
-  
+  /* Controls */
 .start-discussion-btn {
     background-color: #005eb8;
     color: white;
@@ -37,32 +45,22 @@
 }
   
 .search-input {
-    flex: 1;
+    width: 250px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 20px;
 }
   
 .sort-dropdown {
+    width: 120px;
     padding: 10px;
     border-radius: 6px;
     border: 1px solid #ccc;
 }
   
-.forum-body {
-    display: flex;
-    gap: 20px;
-}
-  
-  /* Discussion list styles */
-.discussions-list {
-    flex: 3;
-    background-color: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-}
-  
+/* ---------------------------------- */
+/* Table-like layout for discussions */
+/* ---------------------------------- */
 .discussions-header,
 .discussion-card {
     display: grid;
@@ -81,19 +79,21 @@
     background-color: #f6f6f6;
     cursor: pointer;
 }
-
-.discussions-list {
-    flex: 3;
-    background-color: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
+  
+/* Column-specific styles */
+.topic-col {
+    color: #005eb8;
+    font-weight: bold;
 }
   
+.title-col {
+    color: #333;
+}
   
-.topic-col { color: #005eb8; font-weight: bold; }
-.title-col { color: #333; }
-.replies-col, .likes-col, .activity-col { text-align: center; }
+.replies-col,
+.likes-col,
+.activity-col {
+    text-align: center;
+}
+  
   
