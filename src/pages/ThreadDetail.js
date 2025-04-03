@@ -1,40 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './ThreadDetail.css';
+import axios from "axios";
 import TopicSidebar from '../components/TopicSidebar';
 
 function ThreadDetail() {
   const { id } = useParams();
-
-  // Dummy data
-  const thread = {
-    id,
-    title: "Help with project",
-    author: "littleonefmohio",
-    date: "Mar 28, 2018",
-    content: "I am hoping someone can help me with this. I have been trying to finish the project",
-    likes: 12
-  };
+  const [thread, setThread] = useState(null);
+  const [replies, setReplies] = useState([]);
+  const [comment, setComment] = useState('');
+  
+  useEffect(() => {
+    axios.get(`http://localhost:5000/api/discussion/${id}`)
+      .then(response => {
+        setThread(response.data.discussion);
+        setReplies(response.data.comments);
+        setThreadLikes(response.data.discussion.likes); //update when data arrives
+      })
+      .catch(error => console.error('Error fetching thread:', error));
+  }, [id]);
+  
 
   const [userLiked, setUserLiked] = useState(false);
-  const [threadLikes, setThreadLikes] = useState(thread.likes);
-  const [replies, setReplies] = useState([
-    {
-      id: 1,
-      user: "littleonefmohio",
-      date: "Apr 2, 2018",
-      message: "Update. I didn't finish the project",
-      likes: 2
-    },
-    {
-      id: 2,
-      user: "Merry, Alumni Mentor",
-      date: "Apr 2, 2018",
-      message: "Good for you. If you can get out and walk...",
-      likes: 3
-    }
-  ]);
-  const [comment, setComment] = useState('');
+  const [threadLikes, setThreadLikes] = useState(0);
+    
 
   const handleLike = () => {
     if (!userLiked) {
@@ -55,15 +44,16 @@ function ThreadDetail() {
 
   const handlePostComment = () => {
     if (comment.trim()) {
-      const newComment = {
-        id: replies.length + 1,
-        user: "You",
-        date: "Just now",
-        message: comment,
-        likes: 0
-      };
-      setReplies([...replies, newComment]);
-      setComment('');
+      fetch('http://localhost:5000/api/comment', {
+        method: 'POST',
+        body: JSON.stringify({ discussion_id: id, user: 'You', message: comment }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(() => {
+        setReplies([...replies, { id: replies.length + 1, user: "You", date: "Just now", message: comment, likes: 0 }]);
+        setComment('');
+      })
+      .catch(error => console.error('Error posting comment:', error));
     }
   };
 
@@ -71,18 +61,24 @@ function ThreadDetail() {
     <div className="thread-page">
         <div className="thread-content">
             <div className="thread-detail">
-                <div className="thread-post">
-                    <h1 className="thread-title">{thread.title}</h1>
-                    <p className="meta">
-                    Posted by <strong>{thread.author}</strong> on {thread.date}
-                    </p>
-                    <p>{thread.content}</p>
+              
+            {thread ? (
+              <div className="thread-post">
+                <h1 className="thread-title">{thread.title}</h1>
+                <p className="meta">
+                  Posted by <strong>{thread.user}</strong> on {thread.created_at}
+                </p>
+                <p>{thread.content}</p>
 
-                    <button className="comment-btn">Comment</button>
-                    <button className="like-btn" onClick={handleLike} disabled={userLiked}>
-                        Like ({threadLikes})
-                    </button>
-                </div>
+                <button className="comment-btn">Comment</button>
+                <button className="like-btn" onClick={handleLike} disabled={userLiked}>
+                  Like ({threadLikes})
+                </button>
+              </div>
+            ) : (
+              <p>Loading post...</p>
+            )}
+
 
                 <div className="replies-section">
                     <h3>Replies</h3>

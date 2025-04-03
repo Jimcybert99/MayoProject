@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+// React Frontend: ForumHome.js
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import './ForumHome.css';
 import TopicSidebar from '../components/TopicSidebar';
@@ -6,46 +8,45 @@ import NewThreadModal from '../components/NewThreadModal';
 
 
 function ForumHome() {
-  const [discussions, setDiscussions] = useState([
-    {
-      id: 1,
-      topic: 'topic 1',
-      title: 'I am not creative with titles',
-      replies: 12,
-      likes: 5,
-      activity: '48s'
-    },
-    {
-      id: 2,
-      topic: 'topic 2',
-      title: 'How can I be happy? Please reply',
-      replies: 8,
-      likes: 3,
-      activity: '2m'
-    },
-    {
-      id: 3,
-      topic: 'topic 3',
-      title: 'How can I pay Taxes?',
-      replies: 0,
-      likes: 0,
-      activity: '5m'
-    }
-  ]);
-
-  const [sortOption, setSortOption] = useState('date');
+  const [discussions, setDiscussions] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [sortOption, setSortOption] = useState('date');
 
-  const handlePostDiscussion = (newPost) => {
-    const newDiscussion = {
-      id: discussions.length + 1,
-      topic: newPost.topic,
-      title: newPost.title,
-      replies: 0,
-      likes: 0,
-      activity: 'Just now'
-    };
-    setDiscussions([newDiscussion, ...discussions]);
+  // Fetch discussions from backend
+  useEffect(() => {
+    axios.get('http://localhost:5000/api/discussions')
+      .then(response => setDiscussions(response.data))
+      .catch(error => console.error('Error fetching discussions:', error));
+  }, []);
+
+
+  // Function to create a new discussion (sends data to backend)
+  const handlePostDiscussion = async (newPost) => {
+    
+    console.log("Posting new discussion...", newPost); // 🔍 LOG 1
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/discussion', {
+        user: "Anonymous", // Change if needed
+        topic: newPost.topic,
+        title: newPost.title,
+        content: newPost.message
+      });
+
+      console.log("Backend response:", response.data); // 🔍 LOG 2
+
+
+      if (response.status === 201) {
+        const newDiscussion = {
+          ...response.data,
+          replies: 0,
+          activity: "Just now"
+        };
+        setDiscussions([newDiscussion, ...discussions]);
+      }
+    } catch (error) {
+      console.error('Error creating discussion:', error);
+    }
   };
 
   
