@@ -1,0 +1,12 @@
+# Ignore node_modules folder
+node_modules/
+
+# build outputs
+build/
+dist/
+
+# OS-specific
+.DS_Store
+
+# environment variables
+.env
