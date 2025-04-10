@@ -1,4 +1,4 @@
-mysql -u root -p
+ermysql -u root -p
 Password123
 SOURCE C:/Users/Jimbo/Desktop/forum_db.sql;
 (remember to connect to database in MySQL)
@@ -7,7 +7,7 @@ cd flask-server
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
-python app.py
+python server.py
 
 cd frontend
 npm install (ifnot)
