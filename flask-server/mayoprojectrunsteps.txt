@@ -9,4 +9,5 @@ python app.py
 
 cd frontend
 npm install (ifnot)
+npm install axios
 npm start

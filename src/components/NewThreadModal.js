@@ -10,13 +10,13 @@ function NewThreadModal({ isOpen, onClose, onPost }) {
 
     const handleSubmit = () => {
         if (topic.trim() && title.trim() && message.trim()) {
-        onPost({ topic, title, message });
-        setTopic('');
-        setTitle('');
-        setMessage('');
-        onClose();
-    }
-};
+            onPost({ topic, title, content: message });
+            setTopic('');
+            setTitle('');
+            setMessage('');
+            onClose();
+        }
+    };
 
     return (
         <div className="modal-overlay">

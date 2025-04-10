@@ -1,53 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './ForumHome.css';
 import TopicSidebar from '../components/TopicSidebar';
 import NewThreadModal from '../components/NewThreadModal';
-
+import axios from 'axios';
 
 function ForumHome() {
-  const [discussions, setDiscussions] = useState([
-    {
-      id: 1,
-      topic: 'topic 1',
-      title: 'I am not creative with titles',
-      replies: 12,
-      likes: 5,
-      activity: '48s'
-    },
-    {
-      id: 2,
-      topic: 'topic 2',
-      title: 'How can I be happy? Please reply',
-      replies: 8,
-      likes: 3,
-      activity: '2m'
-    },
-    {
-      id: 3,
-      topic: 'topic 3',
-      title: 'How can I pay Taxes?',
-      replies: 0,
-      likes: 0,
-      activity: '5m'
-    }
-  ]);
-
+  const [discussions, setDiscussions] = useState([]);
   const [sortOption, setSortOption] = useState('date');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handlePostDiscussion = (newPost) => {
-    const newDiscussion = {
-      id: discussions.length + 1,
-      topic: newPost.topic,
-      title: newPost.title,
-      replies: 0,
-      likes: 0,
-      activity: 'Just now'
-    };
-    setDiscussions([newDiscussion, ...discussions]);
-  };
+    // Fetch discussions when component mounts
+  useEffect(() => {
+    axios.get('http://localhost:5000/api/discussions')
+      .then(response => setDiscussions(response.data))
+      .catch(error => console.error('Error fetching discussions:', error));
+  }, []);
 
+    // Submit new discussion to backend
+  const handlePostDiscussion = async (newPost) => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/discussion', {
+        user: newPost.user || 'Anonymous',
+        topic: newPost.topic,
+        title: newPost.title,
+        content: newPost.content
+      });
+      if (response.status === 201) {
+        setDiscussions([response.data, ...discussions]);
+      }
+    } catch (error) {
+      console.error('Error posting discussion:', error.message);
+      if (error.response) {
+        console.error('Backend error:', error.response.data);
+      }
+    }
+  };
   
   return (
     <div className="forum-home">

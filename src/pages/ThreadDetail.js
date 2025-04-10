@@ -1,71 +1,87 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './ThreadDetail.css';
+import axios from 'axios';
 import TopicSidebar from '../components/TopicSidebar';
 
 function ThreadDetail() {
+
   const { id } = useParams();
-
-  // Dummy data
-  const thread = {
-    id,
-    title: "Help with project",
-    author: "littleonefmohio",
-    date: "Mar 28, 2018",
-    content: "I am hoping someone can help me with this. I have been trying to finish the project",
-    likes: 12
-  };
-
-  const [userLiked, setUserLiked] = useState(false);
-  const [threadLikes, setThreadLikes] = useState(thread.likes);
-  const [replies, setReplies] = useState([
-    {
-      id: 1,
-      user: "littleonefmohio",
-      date: "Apr 2, 2018",
-      message: "Update. I didn't finish the project",
-      likes: 2
-    },
-    {
-      id: 2,
-      user: "Merry, Alumni Mentor",
-      date: "Apr 2, 2018",
-      message: "Good for you. If you can get out and walk...",
-      likes: 3
-    }
-  ]);
+  const [thread, setThread] = useState(null);
+  const [replies, setReplies] = useState([]);
   const [comment, setComment] = useState('');
+  const [userLiked, setUserLiked] = useState(false);
+  const [threadLikes, setThreadLikes] = useState(0);
 
+    // Fetch discussion and its comments
+  useEffect(() => {
+    axios.get(`http://localhost:5000/api/discussion/${id}`)
+      .then(response => {
+        setThread(response.data.discussion);
+        setReplies(response.data.comments);
+      })
+      .catch(error => console.error('Error fetching thread:', error));
+  }, [id]);
+
+    // Update likes when thread data is available
+  useEffect(() => {
+    if (thread) {
+      setThreadLikes(thread.likes);
+    }
+  }, [thread]);
+
+    // Handle thread like
   const handleLike = () => {
     if (!userLiked) {
-      setThreadLikes(threadLikes + 1);
-      setUserLiked(true);
+      axios.post(`http://localhost:5000/api/discussion/${id}/like`)
+        .then(() => {
+          setThreadLikes(prev => prev + 1);
+          setUserLiked(true);
+        })
+        .catch(error => console.error('Error liking thread:', error));
     }
   };
 
-  const handleReplyLike = (id) => {
-    setReplies((prev) =>
-      prev.map((reply) =>
-        reply.id === id && !reply.userLiked
-          ? { ...reply, likes: reply.likes + 1, userLiked: true }
-          : reply
-      )
-    );
+    // Handle comment like
+  const handleReplyLike = (replyId) => {
+    axios.post(`http://localhost:5000/api/comment/${replyId}/like`)
+      .then(() => {
+        setReplies(prev =>
+          prev.map(reply =>
+            reply.id === replyId && !reply.userLiked
+              ? { ...reply, likes: reply.likes + 1, userLiked: true }
+              : reply
+          )
+        );
+      })
+      .catch(error => console.error('Error liking comment:', error));
   };
 
+    // Handle posting a new comment
   const handlePostComment = () => {
     if (comment.trim()) {
-      const newComment = {
-        id: replies.length + 1,
-        user: "You",
-        date: "Just now",
-        message: comment,
-        likes: 0
-      };
-      setReplies([...replies, newComment]);
-      setComment('');
+      axios.post('http://localhost:5000/api/comment', {
+        discussion_id: id,
+        user: 'Anonymous',
+        message: comment
+      })
+        .then(() => {
+          const newComment = {
+            id: replies.length + 1,
+            user: 'Anonymous',
+            date: 'Just now',
+            message: comment,
+            likes: 0
+          };
+          setReplies([...replies, newComment]);
+          setComment('');
+        })
+        .catch(error => console.error('Error posting comment:', error));
     }
   };
+
+  if (!thread) return <p>Loading...</p>;
+
 
   return (
     <div className="thread-page">
