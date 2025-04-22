@@ -1,0 +1,45 @@
+<html>
+
+<head>
+   
+    <title>Mood Tracker</title>
+    <link rel="stylesheet" href="Moodsstyle.css">
+</head>
+
+<body>
+
+    <h1>How are you feeling today?</h1>
+
+    <div>
+        <button class="happy" onclick="setMood('Happy')"> Happy</button>
+        <button class="sad" onclick="setMood('Sad')"> Sad</button>
+        <button class="angry" onclick="setMood('Angry')"> Angry</button>
+        <button class="neutral" onclick="setMood('Neutral')"> Neutral</button>
+        <button class="excited" onclick="setMood('Excited')"> Excited</button>
+        <button class="nervous" onclick="setMood('Nervous')"> Nervous</button>
+
+    </div>
+
+    <div class="rating" id="rating-div" style="display: none;">
+        <label for="rating">Rate your mood (1-10): </label>
+        <input type="number" id="rating" name="rating" min="1" max="10" step="1">
+        <button onclick="submitRating()">Submit Rating</button>
+    </div>
+
+    <div class="reason" id="reason-div" style="display: none;">
+        <label for="reason">Why do you feel that way?</label><br>
+        <textarea id="reason-text" placeholder="Enter your reason here..." rows="4" cols="50"></textarea><br>
+        <button onclick="saveMood()">Submit Reason</button>
+    </div>
+
+    <h2>Your Mood History</h2>
+    <ul id="mood-history-list">
+        <!-- Mood history will appear here -->
+    </ul>
+
+    <button class="clear-button" onclick="clearHistory()">Clear History</button>
+
+    <script src="Mayo clinic.js"></script>
+</body>
+
+</html>
