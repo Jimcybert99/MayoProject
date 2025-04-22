@@ -18,7 +18,7 @@ cursor = db.cursor(dictionary=True)# Use dictionary=True to return results as JS
 @app.route("/api/discussions", methods=["GET"])
 def get_discussions():
     # Get all discussions sorted by latest
-    cursor.execute("SELECT id, topic, title, likes, created_at FROM discussions ORDER BY created_at DESC")
+    cursor.execute("SELECT id, title, likes, created_at FROM discussions ORDER BY created_at DESC")
     discussions = cursor.fetchall()
     # For each discussion, add the reply count and time since last activity
     for d in discussions:
@@ -51,8 +51,8 @@ def post_discussion():
     print("Incoming data:", data)  # 🐞 Add this
     # Insert the new discussion into the database
     cursor.execute(
-        "INSERT INTO discussions (user, topic, title, content) VALUES (%s, %s, %s, %s)",
-        (data["user"], data["topic"], data["title"], data["content"])
+        "INSERT INTO discussions (user, title, content) VALUES (%s, %s, %s)",
+        (data["user"], data["title"], data["content"])
     )
     db.commit()
     # Fetch and return the newly inserted discussion
@@ -96,4 +96,4 @@ def time_since(timestamp):
 
 # Run the Flask development server
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5001)

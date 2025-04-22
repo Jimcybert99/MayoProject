@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './ThreadDetail.css';
 import axios from 'axios';
-import TopicSidebar from '../components/TopicSidebar';
+import RecentlyViewedSidebar from '../components/RecentlyViewedSidebar';
 
 function ThreadDetail() {
 
@@ -15,7 +15,7 @@ function ThreadDetail() {
 
     // Fetch discussion and its comments
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/discussion/${id}`)
+    axios.get(`http://localhost:5001/api/discussion/${id}`)
       .then(response => {
         setThread(response.data.discussion);
         setReplies(response.data.comments);
@@ -33,7 +33,7 @@ function ThreadDetail() {
     // Handle thread like
   const handleLike = () => {
     if (!userLiked) {
-      axios.post(`http://localhost:5000/api/discussion/${id}/like`)
+      axios.post(`http://localhost:5001/api/discussion/${id}/like`)
         .then(() => {
           setThreadLikes(prev => prev + 1);
           setUserLiked(true);
@@ -44,7 +44,7 @@ function ThreadDetail() {
 
     // Handle comment like
   const handleReplyLike = (replyId) => {
-    axios.post(`http://localhost:5000/api/comment/${replyId}/like`)
+    axios.post(`http://localhost:5001/api/comment/${replyId}/like`)
       .then(() => {
         setReplies(prev =>
           prev.map(reply =>
@@ -60,7 +60,7 @@ function ThreadDetail() {
     // Handle posting a new comment
   const handlePostComment = () => {
     if (comment.trim()) {
-      axios.post('http://localhost:5000/api/comment', {
+      axios.post('http://localhost:5001/api/comment', {
         discussion_id: id,
         user: 'Anonymous',
         message: comment
@@ -133,7 +133,7 @@ function ThreadDetail() {
             </div>
 
             <div className="thread-sidebar">
-                <TopicSidebar />
+                <RecentlyViewedSidebar />
             </div>
         </div>
     </div>

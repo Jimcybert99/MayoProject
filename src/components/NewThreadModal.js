@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import './NewThreadModal.css';
 
 function NewThreadModal({ isOpen, onClose, onPost }) {
-    const [topic, setTopic] = useState('');
     const [title, setTitle] = useState('');
     const [message, setMessage] = useState('');
 
     if (!isOpen) return null;
 
     const handleSubmit = () => {
-        if (topic.trim() && title.trim() && message.trim()) {
-            onPost({ topic, title, content: message });
-            setTopic('');
+        if (title.trim() && message.trim())            {
+            onPost({ title, content: message });
             setTitle('');
             setMessage('');
             onClose();
@@ -23,14 +21,6 @@ function NewThreadModal({ isOpen, onClose, onPost }) {
             <div className="modal">
                 <button className="close-btn" onClick={onClose}>×</button>
                 <h2>Start a discussion</h2>
-
-                <label>What topic does this discussion belong to?</label>
-                <input
-                    type="text"
-                    placeholder="e.g. Mental Health, Nutrition"
-                    value={topic}
-                    onChange={(e) => setTopic(e.target.value)}
-                />
 
                 <label>What is the title of this discussion?</label>
                 <input

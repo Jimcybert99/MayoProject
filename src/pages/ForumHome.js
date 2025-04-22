@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './ForumHome.css';
-import TopicSidebar from '../components/TopicSidebar';
+import RecentlyViewedSidebar from '../components/RecentlyViewedSidebar';
 import NewThreadModal from '../components/NewThreadModal';
 import axios from 'axios';
 
@@ -12,7 +12,7 @@ function ForumHome() {
 
     // Fetch discussions when component mounts
   useEffect(() => {
-    axios.get('http://localhost:5000/api/discussions')
+    axios.get('http://localhost:5001/api/discussions')
       .then(response => setDiscussions(response.data))
       .catch(error => console.error('Error fetching discussions:', error));
   }, []);
@@ -20,9 +20,8 @@ function ForumHome() {
     // Submit new discussion to backend
   const handlePostDiscussion = async (newPost) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/discussion', {
+      const response = await axios.post('http://localhost:5001/api/discussion', {
         user: newPost.user || 'Anonymous',
-        topic: newPost.topic,
         title: newPost.title,
         content: newPost.content
       });
@@ -36,11 +35,21 @@ function ForumHome() {
       }
     }
   };
+
+  const handleViewThread = (id, title) => {
+    const viewed = JSON.parse(localStorage.getItem("recentlyViewed") || "[]");
+    const updated = [
+      { id, title },
+      ...viewed.filter((item) => item.id !== id)
+    ].slice(0, 5); // Max 5 items
+    localStorage.setItem("recentlyViewed", JSON.stringify(updated));
+  };
+  
   
   return (
     <div className="forum-home">
       <div className="forum-body">
-        <TopicSidebar />
+        <RecentlyViewedSidebar />
 
         <div className="discussions-list">
           <NewThreadModal
@@ -71,7 +80,6 @@ function ForumHome() {
           </div>
 
           <div className="discussions-header">
-            <span className="topic-col">Topic</span>
             <span className="title-col">Title</span>
             <span className="replies-col">Replies</span>
             <span className="likes-col">Likes</span>
@@ -80,9 +88,14 @@ function ForumHome() {
 
           {discussions.map((d) => (
             <div className="discussion-card" key={d.id}>
-              <span className="topic-col">{d.topic}</span>
               <span className="title-col">
-                <Link to={`/thread/${d.id}`}>{d.title}</Link>
+              <Link
+               to={`/thread/${d.id}`}
+               onClick={() => handleViewThread(d.id, d.title)}
+              >
+                {d.title}
+              </Link>
+
               </span>
               <span className="replies-col">{d.replies}</span>
               <span className="likes-col">{d.likes}</span>
