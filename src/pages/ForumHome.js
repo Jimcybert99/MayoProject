@@ -5,10 +5,15 @@ import RecentlyViewedSidebar from '../components/RecentlyViewedSidebar';
 import NewThreadModal from '../components/NewThreadModal';
 import axios from 'axios';
 
+const currentUser = { name: "Gabriel", role: "admin" }; // or "user"
+
+
+
 function ForumHome() {
   const [discussions, setDiscussions] = useState([]);
   const [sortOption, setSortOption] = useState('date');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
     // Fetch discussions when component mounts
   useEffect(() => {
@@ -44,7 +49,20 @@ function ForumHome() {
     ].slice(0, 5); // Max 5 items
     localStorage.setItem("recentlyViewed", JSON.stringify(updated));
   };
-  
+
+  const filteredDiscussions = discussions
+  .filter(d =>
+    d.title.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+  .sort((a, b) => {
+    if (sortOption === "alphabetical") {
+      return a.title.localeCompare(b.title);
+    } else if (sortOption === "unanswered") {
+      return a.replies - b.replies;
+    } else {
+      return new Date(b.created_at) - new Date(a.created_at); // default: by date
+    }
+  });  
   
   return (
     <div className="forum-home">
@@ -59,15 +77,18 @@ function ForumHome() {
           />
 
           <div className="forum-header">
-          <button className="start-discussion-btn" onClick={() => setIsModalOpen(true)}>
-            Start a discussion
-          </button>
+            <button className="start-discussion-btn" onClick={() => setIsModalOpen(true)}>
+              Start a discussion
+            </button>
 
             <input
               type="text"
               placeholder="Search discussions"
               className="search-input"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
+
             <select
               className="sort-dropdown"
               value={sortOption}
@@ -86,16 +107,15 @@ function ForumHome() {
             <span className="activity-col">Activity</span>
           </div>
 
-          {discussions.map((d) => (
+          {filteredDiscussions.map((d) => (
             <div className="discussion-card" key={d.id}>
               <span className="title-col">
-              <Link
-               to={`/thread/${d.id}`}
-               onClick={() => handleViewThread(d.id, d.title)}
-              >
-                {d.title}
-              </Link>
-
+                <Link
+                  to={`/thread/${d.id}`}
+                  onClick={() => handleViewThread(d.id, d.title)}
+                >
+                  {d.title}
+                </Link>
               </span>
               <span className="replies-col">{d.replies}</span>
               <span className="likes-col">{d.likes}</span>

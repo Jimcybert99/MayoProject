@@ -94,6 +94,23 @@ def time_since(timestamp):
     days = int(hours / 24)
     return f"{days} days ago"
 
+@app.route("/api/discussion/<int:id>", methods=["DELETE"])
+def delete_discussion(id):
+    cursor.execute("DELETE FROM discussions WHERE id = %s", (id,))
+    db.commit()
+    return jsonify({"status": "deleted"})
+
+
+@app.route("/api/comment/<int:id>", methods=["DELETE"])
+def delete_comment(id):
+    cursor.execute("DELETE FROM comments WHERE id = %s", (id,))
+    db.commit()
+    return jsonify({"status": "deleted"})
+
 # Run the Flask development server
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
+
+
+
+
