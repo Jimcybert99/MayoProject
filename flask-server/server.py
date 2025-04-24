@@ -9,7 +9,7 @@ CORS(app) # Enable CORS so the frontend (React) can talk to this backend
 db = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="",
+    password="Password123",
     database="your_database"
 )
 cursor = db.cursor(dictionary=True)# Use dictionary=True to return results as JSON-like dicts

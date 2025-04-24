@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ForumHome from './pages/ForumHome';
 import ThreadDetail from './pages/ThreadDetail';
+import MoodJournal  from './pages/MoodJournal';
 
 function App() {
   //Shared currentUser state across pages
@@ -18,6 +19,11 @@ function App() {
         {/*Pass currentUser to ThreadDetail*/}
         <Route path="/thread/:id" element={
           <ThreadDetail currentUser={currentUser} />
+        } />
+
+        {/* mood-journal page */}
+        <Route path="/mood" element={
+          <MoodJournal />
         } />
       </Routes>
     </Router>

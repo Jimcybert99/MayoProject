@@ -29,3 +29,21 @@
     background-color: #f1f1f1;
   }
   
+.topics-sidebar a {
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0d57b5;
+  text-decoration: none;
+  display: block;
+  padding: 6px 2px;
+  transition: color 0.15s ease;
+}
+
+.topics-sidebar a:hover {
+  color: #003f80;
+}
+
+.topics-sidebar a:visited {
+  color: #6b6b6b;
+}

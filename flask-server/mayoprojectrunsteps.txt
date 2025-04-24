@@ -1,7 +1,6 @@
 mysql -u root
-run sql scripts in workbench
-(remember to connect to database in xampp)
-
+SOURCE C:/Users/Jimbo/Desktop/forum_db.sql; (your forum file location)
+(remember to connect to database in MySQL)
 
 cd flask-server
 python -m venv venv
