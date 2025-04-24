@@ -5,15 +5,30 @@ import RecentlyViewedSidebar from '../components/RecentlyViewedSidebar';
 import NewThreadModal from '../components/NewThreadModal';
 import axios from 'axios';
 
-const currentUser = { name: "Gabriel", role: "admin" }; // or "user"
 
 
 
-function ForumHome() {
+function ForumHome({ currentUser, setCurrentUser }) {
   const [discussions, setDiscussions] = useState([]);
   const [sortOption, setSortOption] = useState('date');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [adminCreds, setAdminCreds] = useState({ username: '', password: '' });
+
+
+  const handleAdminLogin = async () => {
+    try {
+      const res = await axios.post('http://localhost:5001/api/login', adminCreds);
+      if (res.data.status === 'success') {
+        setCurrentUser({ ...currentUser, role: 'admin' });
+        alert('Admin privileges granted!');
+        setLoginOpen(false);
+      }
+    } catch {
+      alert('Invalid credentials');
+    }
+  };
 
     // Fetch discussions when component mounts
   useEffect(() => {
@@ -81,6 +96,11 @@ function ForumHome() {
               Start a discussion
             </button>
 
+            <button className="start-discussion-btn" onClick={() => setLoginOpen(true)}>
+            Admin Login
+            </button>
+
+
             <input
               type="text"
               placeholder="Search discussions"
@@ -124,6 +144,31 @@ function ForumHome() {
           ))}
         </div>
       </div>
+      {loginOpen && (
+  <div className="modal-overlay">
+    <div className="modal">
+      <button className="close-btn" onClick={() => setLoginOpen(false)}>×</button>
+      <h2>Admin Login</h2>
+      <label>Username</label>
+      <input
+        type="text"
+        onChange={(e) => setAdminCreds({ ...adminCreds, username: e.target.value })}
+      />
+      <label>Password</label>
+      <input
+        type="password"
+        onChange={(e) => setAdminCreds({ ...adminCreds, password: e.target.value })}
+      />
+      <button className="post-btn" onClick={handleAdminLogin}>Log In</button>
+      <button className="post-btn" onClick={() => {
+        setCurrentUser({ ...currentUser, role: 'user' });
+        setLoginOpen(false);
+      }}>
+        Log Out
+      </button>
+    </div>
+  </div>
+)}
     </div>
   );
 }

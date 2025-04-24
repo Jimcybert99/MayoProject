@@ -1,5 +1,4 @@
-mysql -u root -p
-Password123 (defined when database created)
+mysql -u root
 SOURCE C:/Users/Jimbo/Desktop/forum_db.sql; (your forum file location)
 (remember to connect to database in MySQL)
 

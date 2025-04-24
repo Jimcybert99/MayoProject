@@ -7,9 +7,9 @@ CORS(app) # Enable CORS so the frontend (React) can talk to this backend
 
 # Connect to MySQL database
 db = mysql.connector.connect(
-    host="127.0.0.1",
+    host="localhost",
     user="root",
-    password="Password123",
+    password="",
     database="your_database"
 )
 cursor = db.cursor(dictionary=True)# Use dictionary=True to return results as JSON-like dicts
@@ -106,6 +106,15 @@ def delete_comment(id):
     cursor.execute("DELETE FROM comments WHERE id = %s", (id,))
     db.commit()
     return jsonify({"status": "deleted"})
+
+@app.route("/api/login", methods=["POST"])
+def login():
+    data = request.json
+    cursor.execute("SELECT * FROM admins WHERE username = %s AND password = %s", (data["username"], data["password"]))
+    user = cursor.fetchone()
+    if user:
+        return jsonify({"status": "success", "role": "admin"})
+    return jsonify({"status": "failure"}), 401
 
 # Run the Flask development server
 if __name__ == "__main__":

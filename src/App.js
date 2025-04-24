@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ForumHome from './pages/ForumHome';
 import ThreadDetail from './pages/ThreadDetail';
 
 function App() {
+  //Shared currentUser state across pages
+  const [currentUser, setCurrentUser] = useState({ name: "user", role: "user" });
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<ForumHome />} />
-        <Route path="/thread/:id" element={<ThreadDetail />} />
+        {/*Pass currentUser and setCurrentUser to ForumHome*/}
+        <Route path="/" element={
+          <ForumHome currentUser={currentUser} setCurrentUser={setCurrentUser} />
+        } />
+
+        {/*Pass currentUser to ThreadDetail*/}
+        <Route path="/thread/:id" element={
+          <ThreadDetail currentUser={currentUser} />
+        } />
       </Routes>
     </Router>
   );

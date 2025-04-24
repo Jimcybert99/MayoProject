@@ -4,9 +4,8 @@ import './ThreadDetail.css';
 import axios from 'axios';
 import RecentlyViewedSidebar from '../components/RecentlyViewedSidebar';
 
-const currentUser = { name: "Gabriel", role: "admin" }; // or "user"
 
-function ThreadDetail() {
+function ThreadDetail({ currentUser }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [thread, setThread] = useState(null);
@@ -111,6 +110,12 @@ function ThreadDetail() {
     if (confirm) {
       try {
         await axios.delete(`http://localhost:5001/api/discussion/${threadId}`);
+        // Remove from recently viewed
+        const viewed = JSON.parse(localStorage.getItem("recentlyViewed") || "[]");
+        const updated = viewed.filter(item => item.id !== threadId);
+        localStorage.setItem("recentlyViewed", JSON.stringify(updated));
+
+        
         navigate("/");
       } catch (err) {
         console.error("Failed to delete thread:", err);
