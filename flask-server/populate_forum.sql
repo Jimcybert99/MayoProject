@@ -1,5 +1,16 @@
 USE your_database;
 
+INSERT INTO mood_entries (mood, rating, reason)
+VALUES 
+  ('Happy', 9, 'Had a great day at school!'),
+  ('Sad', 3, 'Feeling lonely today.'),
+  ('Excited', 10, 'Got accepted to a program!'),
+  ('Neutral', 5, 'Just another day.');
+
+  
+INSERT INTO admins (username, password)
+VALUES ('admin', 'Password123');
+
 -- Insert 20 discussions
 INSERT INTO discussions (user, title, content, likes, created_at) VALUES ('User1', 'Post-surgery diet questions', 'This is a discussion on: Post-surgery diet questions', 0, '2025-03-29 17:06:07');
 INSERT INTO discussions (user, title, content, likes, created_at) VALUES ('User2', 'Experiencing hair loss – is this normal?', 'This is a discussion on: Experiencing hair loss – is this normal?', 49, '2025-03-20 17:06:07');

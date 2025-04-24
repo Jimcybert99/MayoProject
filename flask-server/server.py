@@ -9,7 +9,7 @@ CORS(app) # Enable CORS so the frontend (React) can talk to this backend
 db = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="Password123",
+    password="",
     database="your_database"
 )
 cursor = db.cursor(dictionary=True)# Use dictionary=True to return results as JSON-like dicts
@@ -115,6 +115,28 @@ def login():
     if user:
         return jsonify({"status": "success", "role": "admin"})
     return jsonify({"status": "failure"}), 401
+
+@app.route("/api/mood", methods=["POST"])
+@cross_origin()
+def post_mood_entry():
+    data = request.get_json()
+    cursor.execute(
+        "INSERT INTO mood_entries (mood, rating, reason, timestamp) VALUES (%s, %s, %s, %s)",
+        (data["mood"], data["rating"], data["reason"], data["date"])
+    )
+    db.commit()
+    return jsonify({"status": "success"}), 201
+
+@app.route("/api/moods", methods=["GET"])
+def get_mood_entries():
+    cursor.execute("SELECT mood, rating, reason, timestamp AS date FROM mood_entries ORDER BY timestamp DESC")
+    return jsonify(cursor.fetchall())
+
+@app.route("/api/moods", methods=["DELETE"])
+def clear_mood_entries():
+    cursor.execute("DELETE FROM mood_entries")
+    db.commit()
+    return jsonify({"status": "cleared"})
 
 # Run the Flask development server
 if __name__ == "__main__":

@@ -2,13 +2,27 @@ import React, { useState, useEffect } from 'react';
 import './MoodJournal.css';
 
 function MoodJournal() {
-  const [moodHistory, setMoodHistory] = useState(() => {
-    return JSON.parse(localStorage.getItem('moodHistory')) || [];
-  });
+  const [moodHistory, setMoodHistory] = useState([]);
   const [currentMood, setCurrentMood] = useState('');
   const [currentRating, setCurrentRating] = useState('');
   const [reason, setReason] = useState('');
   const [step, setStep] = useState('selectMood');
+
+  const loadMoodHistory = () => {
+    fetch("http://localhost:5001/api/moods")
+      .then(res => res.json())
+      .then(data => setMoodHistory(data))
+      .catch(err => console.error("Failed to load mood history:", err));
+  };
+
+  useEffect(() => {
+    loadMoodHistory();
+    fetch("http://localhost:5001/api/moods")
+      .then(res => res.json())
+      .then(data => setMoodHistory(data))
+      .catch(err => console.error("Failed to load mood history:", err));
+  }, []);
+  
 
   const handleMoodClick = (mood) => {
     setCurrentMood(mood);
@@ -28,25 +42,54 @@ function MoodJournal() {
       alert("Please enter a reason for how you're feeling.");
       return;
     }
+  
     const entry = {
       mood: currentMood,
-      rating: currentRating,
+      rating: parseInt(currentRating),
       reason,
-      date: new Date().toLocaleString()
+      date: new Date().toISOString()  // Send ISO date string
     };
-    const updatedHistory = [...moodHistory, entry];
-    setMoodHistory(updatedHistory);
-    localStorage.setItem('moodHistory', JSON.stringify(updatedHistory));
-    setStep('selectMood');
-    setCurrentMood('');
-    setCurrentRating('');
-    setReason('');
+  
+    // Send the entry to the Flask backend
+    fetch("http://localhost:5001/api/mood", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(entry)
+    })
+      .then(response => {
+        if (!response.ok) throw new Error("Failed to save mood entry.");
+        return response.json();
+      })
+      .then(() => {
+        setStep("selectMood");
+        setCurrentMood("");
+        setCurrentRating("");
+        setReason("");
+        loadMoodHistory();
+        alert("Mood entry saved successfully!");
+      })
+      .catch(error => {
+        console.error("Error saving mood entry:", error);
+        alert("There was a problem saving your mood.");
+      });
   };
-
+  
   const clearHistory = () => {
     if (window.confirm("Are you sure you want to clear your mood history?")) {
-      setMoodHistory([]);
-      localStorage.removeItem('moodHistory');
+      fetch("http://localhost:5001/api/moods", {
+        method: "DELETE"
+      })
+      .then(res => res.json())
+      .then(() => {
+        setMoodHistory([]);
+        alert("Mood history cleared.");
+      })
+      .catch(err => {
+        console.error("Error clearing mood history:", err);
+        alert("There was a problem clearing your mood history.");
+      });
     }
   };
 

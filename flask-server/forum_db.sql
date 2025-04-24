@@ -26,6 +26,13 @@ CREATE TABLE IF NOT EXISTS admins (
     password VARCHAR(255) NOT NULL
 );
 
-INSERT INTO admins (username, password)
-VALUES ('admin', 'Password123');
+
+CREATE TABLE IF NOT EXISTs mood_entries (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    mood VARCHAR(50) NOT NULL,
+    rating INT NOT NULL CHECK (rating BETWEEN 1 AND 10),
+    reason TEXT NOT NULL,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
 
