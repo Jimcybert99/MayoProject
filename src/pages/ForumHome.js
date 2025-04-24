@@ -92,12 +92,13 @@ function ForumHome({ currentUser, setCurrentUser }) {
           />
 
           <div className="forum-header">
-            <button className="start-discussion-btn" onClick={() => setIsModalOpen(true)}>
-              Start a discussion
-            </button>
 
             <button className="start-discussion-btn" onClick={() => setLoginOpen(true)}>
             Admin Login
+            </button>
+
+            <button className="start-discussion-btn" onClick={() => setIsModalOpen(true)}>
+              Start a discussion
             </button>
 
 
