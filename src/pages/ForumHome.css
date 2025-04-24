@@ -90,5 +90,20 @@
 .activity-col {
     text-align: center;
 }
+
+.discussion-card .title-col a {
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 600;        /* bolder */
+    letter-spacing: 0.1px;
+    color: #0d57b5;          /* richer blue */
+    text-decoration: none;   /* no underline at any time */
+    transition: color 0.15s ease;
+  }
+  
+  .discussion-card .title-col a:hover {
+    color: #003f80;          /* darker on hover */
+  }
+  
   
   

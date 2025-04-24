@@ -96,6 +96,10 @@ function ForumHome({ currentUser, setCurrentUser }) {
               Start a discussion
             </button>
 
+            <Link to="/mood" style={{ textDecoration: "none" }}>
+              <button className="start-discussion-btn">Mood Journal</button>
+            </Link>
+
             <button className="start-discussion-btn" onClick={() => setLoginOpen(true)}>
             Admin Login
             </button>

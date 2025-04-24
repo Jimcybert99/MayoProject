@@ -1,0 +1,140 @@
+/* ========== Mood Journal (scoped) ========== */
+.mood-journal {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    text-align: center;
+    color: #333;
+  }
+  
+  /* ---------- Headings ---------- */
+  .mood-journal h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 32px;
+    color: #005eb8;                 /* Mayo blue */
+  }
+  
+  .mood-journal h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 48px 0 16px;
+    color: #005eb8;
+  }
+  
+  /* ---------- Mood buttons ---------- */
+  .mood-journal .mood-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+  
+  .mood-journal button {
+    min-width: 120px;
+    padding: 14px 22px;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #fff;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+  
+  .mood-journal button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* individual colours (softened pastels) */
+  .mood-journal .happy   { background: #ffe133; color: #333; }
+  .mood-journal .sad     { background: #8cc4e7; }
+  .mood-journal .angry   { background: #e25a4f; }
+  .mood-journal .neutral { background: #9c9c9c; }
+  .mood-journal .excited { background: #f7b6c8; color: #333; }
+  .mood-journal .nervous { background: #f6a63b; }
+  
+  /* ---------- Rating / reason steps ---------- */
+  .mood-journal .rating,
+  .mood-journal .reason {
+    max-width: 560px;
+    margin: 32px auto 24px;
+    text-align: left;
+  }
+  
+  .mood-journal .rating label,
+  .mood-journal .reason label {
+    display: block;                 /* label above field */
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .mood-journal input[type="number"],
+  .mood-journal textarea {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 15px;
+    border: 1px solid #b9c9db;
+    border-radius: 6px;
+    box-sizing: border-box;
+    margin-top: 12px;
+    background: #fff;
+  }
+  
+  .mood-journal textarea { resize: vertical; }
+  
+  /* ---------- Mayo-blue primary action buttons ---------- */
+  .mood-journal .rating button,
+  .mood-journal .reason button,
+  .mood-journal .primary-btn {
+    background: #005eb8;
+    color: #fff;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  
+  .mood-journal .rating button:hover,
+  .mood-journal .reason button:hover,
+  .mood-journal .primary-btn:hover {
+    background: #004080;
+  }
+  
+  /* ---------- History list ---------- */
+  .mood-journal ul {
+    list-style: none;
+    padding: 0;
+    max-width: 760px;
+    margin: 24px auto 0;
+  }
+  
+  .mood-journal li {
+    background: #fff;
+    border-left: 4px solid #29a64d;   /* calm green */
+    padding: 10px 18px;
+    margin: 10px 0;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  /* ---------- Clear-history button ---------- */
+  .mood-journal .clear-button {
+    background: #d81f1f;
+    color: #fff;
+    margin-top: 32px;
+    border-radius: 24px;
+    padding: 10px 28px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  
+  .mood-journal .clear-button:hover { background: #b41616; }
+  
+  
