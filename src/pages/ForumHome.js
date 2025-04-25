@@ -15,7 +15,25 @@ function ForumHome({ currentUser, setCurrentUser }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [loginOpen, setLoginOpen] = useState(false);
   const [adminCreds, setAdminCreds] = useState({ username: '', password: '' });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  // Check login status on page load
+  useEffect(() => {
+    const loggedIn = sessionStorage.getItem('loggedIn') === 'true';
+    setIsLoggedIn(loggedIn);
+  }, []);
+
+  // Login and Logout functions
+  const handleLoginLogout = () => {
+    if (sessionStorage.getItem('loggedIn') === 'true') {
+      sessionStorage.removeItem('loggedIn');
+      setIsLoggedIn(false);
+    } else {
+      sessionStorage.setItem('loggedIn', 'true');
+      setIsLoggedIn(true);
+    }
+  };
+  
 
   const handleAdminLogin = async () => {
     try {
@@ -39,6 +57,12 @@ function ForumHome({ currentUser, setCurrentUser }) {
 
     // Submit new discussion to backend
   const handlePostDiscussion = async (newPost) => {
+
+    if (!sessionStorage.getItem('loggedIn')) {
+      alert('You must be logged in to post a discussion.');
+      return;
+    }
+
     try {
       const response = await axios.post('http://localhost:5001/api/discussion', {
         user: newPost.user || 'Anonymous',
@@ -92,6 +116,10 @@ function ForumHome({ currentUser, setCurrentUser }) {
           />
 
           <div className="forum-header">
+
+          <button className="start-discussion-btn" onClick={handleLoginLogout}>
+            {isLoggedIn ? 'SessionTestLogout' : 'SessionTestLogin'}
+          </button>
 
             <Link to="/mood" style={{ textDecoration: "none" }}>
               <button className="start-discussion-btn">Mood Journal</button>

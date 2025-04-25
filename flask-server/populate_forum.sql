@@ -6,6 +6,9 @@ VALUES
   ('Sad', 3, 'Feeling lonely today.'),
   ('Excited', 10, 'Got accepted to a program!'),
   ('Neutral', 5, 'Just another day.');
+  
+  select * from mood_entries;
+
 
   
 INSERT INTO admins (username, password)

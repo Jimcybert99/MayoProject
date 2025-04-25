@@ -76,6 +76,11 @@ function ThreadDetail({ currentUser }) {
   };
 
   const handlePostComment = () => {
+    if (!sessionStorage.getItem('loggedIn')) {
+      alert('You must be logged in to post a comment.');
+      return;
+    }
+    
     if (comment.trim()) {
       axios.post('http://localhost:5001/api/comment', {
         discussion_id: id,

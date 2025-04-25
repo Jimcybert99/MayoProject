@@ -38,6 +38,12 @@ function MoodJournal() {
   };
 
   const handleReasonSubmit = () => {
+
+    if (!sessionStorage.getItem('loggedIn')) {
+      alert('You must be logged in to submit your mood.');
+      return;
+    }
+
     if (!reason.trim()) {
       alert("Please enter a reason for how you're feeling.");
       return;
@@ -77,6 +83,12 @@ function MoodJournal() {
   };
   
   const clearHistory = () => {
+
+    if (!sessionStorage.getItem('loggedIn')) {
+      alert('You must be logged in to clear history.');
+      return;
+    }
+
     if (window.confirm("Are you sure you want to clear your mood history?")) {
       fetch("http://localhost:5001/api/moods", {
         method: "DELETE"
