@@ -49,30 +49,50 @@ function ThreadDetail({ currentUser }) {
   }, []);
 
   // Like a thread
-  const handleLike = () => {
-    if (!userLiked) {
-      axios.post(`http://localhost:5001/api/discussion/${id}/like`)
-        .then(() => {
-          setThreadLikes(prev => prev + 1);
-          setUserLiked(true);
-        })
-        .catch(err => console.error('Error liking thread:', err));
+  const toggleThreadLike = async () => {
+    const method = userLiked ? 'delete' : 'post';
+    try {
+      await axios[method](
+        `http://localhost:5001/api/discussion/${id}/like`,
+        { headers: {
+            'X-Admin-Token': sessionStorage.getItem('adminToken') || '',
+            'X-Username':    currentUser.name
+          }
+        }
+      );
+      setThreadLikes(prev => userLiked ? prev - 1 : prev + 1);
+      setUserLiked(!userLiked);
+    } catch (err) {
+      console.error('Error toggling thread like:', err);
     }
   };
 
   // Like a comment
-  const handleReplyLike = replyId => {
-    axios.post(`http://localhost:5001/api/comment/${replyId}/like`)
-      .then(() => {
-        setReplies(prev =>
-          prev.map(r =>
-            r.id === replyId && !r.userLiked
-              ? { ...r, likes: r.likes + 1, userLiked: true }
-              : r
-          )
-        );
-      })
-      .catch(err => console.error('Error liking comment:', err));
+  const toggleReplyLike = async (reply) => {
+    const method = reply.userLiked ? 'delete' : 'post';
+    try {
+      await axios[method](
+        `http://localhost:5001/api/comment/${reply.id}/like`,
+        { headers: {
+            'X-Admin-Token': sessionStorage.getItem('adminToken') || '',
+            'X-Username':    currentUser.name
+          }
+        }
+      );
+      setReplies(prev =>
+        prev.map(r =>
+          r.id === reply.id
+            ? {
+                ...r,
+                likes:    reply.userLiked ? r.likes - 1 : r.likes + 1,
+                userLiked: !reply.userLiked
+              }
+            : r
+        )
+      );
+    } catch (err) {
+      console.error('Error toggling comment like:', err);
+    }
   };
 
   // Post a new comment
@@ -197,8 +217,8 @@ function ThreadDetail({ currentUser }) {
             >
               Comment
             </button>
-            <button className="like-btn" onClick={handleLike} disabled={userLiked}>
-              Like ({threadLikes})
+            <button className="like-btn" onClick={toggleThreadLike}>
+              {userLiked ? 'Unlike' : 'Like'} ({threadLikes})
             </button>
           </div>
 
@@ -212,10 +232,9 @@ function ThreadDetail({ currentUser }) {
                 <p>{reply.message}</p>
                 <button
                   className="like-btn"
-                  onClick={() => handleReplyLike(reply.id)}
-                  disabled={reply.userLiked}
+                  onClick={() => toggleReplyLike(reply)}
                 >
-                  Like ({reply.likes})
+                  {reply.userLiked ? 'Unlike' : 'Like'} ({reply.likes})
                 </button>
                 {(currentUser.role === 'admin'
                   || currentUser.name === reply.user

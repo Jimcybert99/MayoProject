@@ -50,6 +50,17 @@ def like_discussion(id):
     db.commit()
     return jsonify({"status": "success"})
 
+# Route to decrement like count for a discussion
+@app.route("/api/discussion/<int:id>/like", methods=["DELETE"])
+def unlike_discussion(id):
+    # never drop below zero
+    cursor.execute(
+        "UPDATE discussions SET likes = GREATEST(likes - 1, 0) WHERE id = %s",
+        (id,)
+    )
+    db.commit()
+    return jsonify({"status": "success"})
+
 
 # Route to get a specific discussion and all its comments
 @app.route("/api/discussion/<int:id>", methods=["GET"])
@@ -94,6 +105,18 @@ def post_comment():
 @app.route("/api/comment/<int:id>/like", methods=["POST"])
 def like_comment(id):
     cursor.execute("UPDATE comments SET likes = likes + 1 WHERE id = %s", (id,))
+    db.commit()
+    return jsonify({"status": "success"})
+
+
+
+# Route to decrement like count for a comment
+@app.route("/api/comment/<int:id>/like", methods=["DELETE"])
+def unlike_comment(id):
+    cursor.execute(
+        "UPDATE comments SET likes = GREATEST(likes - 1, 0) WHERE id = %s",
+        (id,)
+    )
     db.commit()
     return jsonify({"status": "success"})
 
