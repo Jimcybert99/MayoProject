@@ -136,5 +136,98 @@
   }
   
   .mood-journal .clear-button:hover { background: #b41616; }
+
   
+  #calendar{
+    max-width: 320px;
+    margin:30px auto;
+    text-align: center;
+}
+#monthYear{
+    font-size: 20px;
+    margin-bottom:10px;
+}
+.calendar-header{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    margin-top:20px;
+    font-size: 18px;
+}
+#calendarDays,#calendarWeekdays{
+    display:grid;
+    grid-template-columns: repeat(7,1fr);
+    gap:4px;
+    justify-items: center;
+}
+
+.calendar-days-header,.calendar-grid{
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    gap:5px;
+    max-width: 360px;
+    margin: 10px auto;
+    text-align: center;
+}
+.calendar-grid div{
+    background-color: white;
+    padding:15px 0;
+    border-radius: 6px;
+    cursor:none;
+}
+#calendarWeekdays div{
+    font-weight: bold;
+    padding: 5px 0;
+    background-color: white;
+    border-radius: 4px;
+    }
+#calendarDays div{
+    padding: 10px;
+    border: 1px solid gray;
+    background-color: whitesmoke;
+    cursor: pointer;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: transform 0.2s ease, background-color 0.2s ease; 
+
+}
+
+#calendarDays div:hover{
+    background-color: white;
+    transform:scale(1.05);
+    cursor:pointer;
+}
+
+.calendar-grid .happy{background-color: yellow!important;}
+.calendar-grid .sad{background-color: skyblue !important; color:white;}
+.calendar-grid .angry{background-color: red !important; color:white;}
+.calendar-grid .neutral{background-color: gray !important; color:white;}
+.calendar-grid .excited{background-color: pink !important; color:black;}
+.calendar-grid .nervous{background-color: orange !important; color:black;}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    max-width: 700px;
+    margin: 30px auto 20px;
+    text-align: left;
+}
+
+li {
+    background-color: white;
+    border-left: 6px solid green;
+    padding: 10px 15px;
+    margin: 10px 0;
+    border-radius: 4px;
+}
+
+.clear-button {
+    background-color: red;
+    color: white;
+}
+
+.clear-button:hover {
+    background-color: red;
+}
   

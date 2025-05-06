@@ -180,9 +180,10 @@ def login():
 @cross_origin()
 def post_mood_entry():
     data = request.get_json()
+    # Insert only the mood, rating, reason; timestamp defaults to NOW()
     cursor.execute(
-        "INSERT INTO mood_entries (mood, rating, reason, timestamp) VALUES (%s, %s, %s, %s)",
-        (data["mood"], data["rating"], data["reason"], data["date"])
+        "INSERT INTO mood_entries (mood, rating, reason) VALUES (%s, %s, %s)",
+        (data["mood"], data["rating"], data["reason"])
     )
     db.commit()
     return jsonify({"status": "success"}), 201
@@ -190,11 +191,26 @@ def post_mood_entry():
 
 # Route to fetch mood journal entries
 @app.route("/api/moods", methods=["GET"])
+@cross_origin()
 def get_mood_entries():
-    cursor.execute(
-        "SELECT mood, rating, reason, timestamp AS date FROM mood_entries ORDER BY timestamp DESC"
-    )
+    date_filter = request.args.get("date")  # e.g. "2025-05-06"
+    if date_filter:
+        # only entries whose DATE(timestamp) matches
+        cursor.execute(
+            """
+            SELECT mood, rating, reason, timestamp AS date
+              FROM mood_entries
+             WHERE DATE(timestamp) = %s
+             ORDER BY timestamp DESC
+            """,
+            (date_filter,)
+        )
+    else:
+        cursor.execute(
+            "SELECT mood, rating, reason, timestamp AS date FROM mood_entries ORDER BY timestamp DESC"
+        )
     return jsonify(cursor.fetchall())
+
 
 
 # Route to clear all mood journal entries
